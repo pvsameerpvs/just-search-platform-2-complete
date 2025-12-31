@@ -1,6 +1,17 @@
-[00:00:00.780] Server  LOG     ✓ Ready in 524ms
-[00:00:01.775] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:01.879] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:06.070] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:13.712] Server  LOG     Login attempt for client: Found role='client', status='active'
-[00:00:19.329] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:00.571] Server  LOG     ✓ Ready in 376ms
+[00:00:03.012] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:04.647] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:07.991] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:09.702] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:14.722] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:15.735] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:17.313] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:18.657] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:21.779] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:23.113] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:47.680] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:02:32.488] Server  LOG     ✓ Compiled in 1207ms
+[00:02:33.523] Server  LOG     ✓ Compiled in 102ms
+[00:03:18.342] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:03:25.688] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:03:37.808] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
