@@ -212,10 +212,12 @@ const SHEET_ID = ()=>{
 };
 async function readRange(range) {
     const sheets = sheetsClient();
+    console.info("attempt to read range", range);
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SHEET_ID(),
         range
     });
+    console.info("read range", range);
     return res.data.values ?? [];
 }
 async function appendRow(range, values) {
@@ -268,62 +270,74 @@ async function POST(req) {
     }, {
         status: 400
     });
-    const { username, password } = parsed.data;
-    const rows = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$lib$2f$googleSheets$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["readRange"])("Users!A2:G");
-    const row = rows.find((r)=>{
-        const email = (r?.[2] ?? "").toString().toLowerCase();
-        const uname = (r?.[3] ?? "").toString().toLowerCase();
-        const input = username.toLowerCase();
-        return email === input || uname === input;
-    });
-    if (!row) {
-        console.log("Login failed: User not found in sheet for input:", username);
+    try {
+        const { username, password } = parsed.data;
+        console.info("Login attempt for", username);
+        const rows = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$lib$2f$googleSheets$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["readRange"])("Users!A2:G");
+        console.info("rows from google sheet users", username);
+        const row = rows.find((r)=>{
+            const email = (r?.[2] ?? "").toString().toLowerCase();
+            const uname = (r?.[3] ?? "").toString().toLowerCase();
+            const input = username.toLowerCase();
+            return email === input || uname === input;
+        });
+        if (!row) {
+            console.log("Login failed: User not found in sheet for input:", username);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "Invalid credentials"
+            }, {
+                status: 401
+            });
+        }
+        const role = (row?.[5] ?? "").toString().toLowerCase().trim();
+        const status = (row?.[6] ?? "active").toString().toLowerCase().trim();
+        console.log(`Login attempt for ${username}: Found role='${role}', status='${status}'`);
+        if (role !== "client") {
+            console.log(`Login failed: Role mismatch. Expected 'client', got '${role}'`);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "Not a client account"
+            }, {
+                status: 403
+            });
+        }
+        if (status !== "active") {
+            console.log(`Login failed: Status mismatch. Expected 'active', got '${status}'`);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "Account inactive"
+            }, {
+                status: 403
+            });
+        }
+        const hash = (row?.[4] ?? "").toString();
+        const ok = await __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].compare(password, hash).catch(()=>false);
+        if (!ok) {
+            console.log("Login failed: Password mismatch for user:", username);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: "Invalid credentials"
+            }, {
+                status: 401
+            });
+        }
+        const res = __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            ok: true,
+            client_id: (row?.[0] ?? "").toString(),
+            name: (row?.[1] ?? "").toString()
+        });
+        res.cookies.set("js_client_session", "ok", {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/"
+        });
+        return res;
+    } catch (error) {
+        console.error("Login API Error:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Invalid credentials"
+            error: "Internal Server Error",
+            details: error.message
         }, {
-            status: 401
+            status: 500
         });
     }
-    const role = (row?.[5] ?? "").toString().toLowerCase().trim();
-    const status = (row?.[6] ?? "active").toString().toLowerCase().trim();
-    console.log(`Login attempt for ${username}: Found role='${role}', status='${status}'`);
-    if (role !== "client") {
-        console.log(`Login failed: Role mismatch. Expected 'client', got '${role}'`);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Not a client account"
-        }, {
-            status: 403
-        });
-    }
-    if (status !== "active") {
-        console.log(`Login failed: Status mismatch. Expected 'active', got '${status}'`);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Account inactive"
-        }, {
-            status: 403
-        });
-    }
-    const hash = (row?.[4] ?? "").toString();
-    const ok = await __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$bcryptjs$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].compare(password, hash).catch(()=>false);
-    if (!ok) {
-        console.log("Login failed: Password mismatch for user:", username);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Invalid credentials"
-        }, {
-            status: 401
-        });
-    }
-    const res = __TURBOPACK__imported__module__$5b$project$5d2f$Projects$2f$JustSearch$2f$just$2d$search$2d$lead$2d$automation$2f$just$2d$search$2d$platform$2d$2$2d$complete$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-        ok: true,
-        client_id: (row?.[0] ?? "").toString(),
-        name: (row?.[1] ?? "").toString()
-    });
-    res.cookies.set("js_client_session", "ok", {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/"
-    });
-    return res;
 }
 }),
 ];

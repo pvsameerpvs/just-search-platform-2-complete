@@ -1,4 +1,6 @@
 import { google } from "googleapis";
+import path from "path";
+import fs from "fs";
 
 function getAuth() {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
@@ -26,7 +28,9 @@ export const SHEET_ID = () => {
 
 export async function readRange(range: string) {
   const sheets = sheetsClient();
+   console.info("attempt to read range", range);
   const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID(), range });
+ console.info("read range", range);
   return res.data.values ?? [];
 }
 

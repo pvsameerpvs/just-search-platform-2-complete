@@ -1,17 +1,16 @@
-[00:00:00.571] Server  LOG     ✓ Ready in 376ms
-[00:00:03.012] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:04.647] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:07.991] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:00:09.702] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:00:14.722] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:00:15.735] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:00:17.313] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:18.657] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:21.779] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:00:23.113] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:00:47.680] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:02:32.488] Server  LOG     ✓ Compiled in 1207ms
-[00:02:33.523] Server  LOG     ✓ Compiled in 102ms
-[00:03:18.342] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:03:25.688] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
-[00:03:37.808] Server  ERROR   ⨯ Error: invalid_grant: Invalid JWT Signature.
+[00:00:00.873] Server  LOG     ✓ Ready in 593ms
+[00:00:12.227] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:15.560] Server  INFO    Login attempt for "client"
+[00:00:15.561] Server  INFO    attempt to read range "Users!A2:G"
+[00:00:17.722] Server  INFO    read range "Users!A2:G"
+[00:00:17.722] Server  INFO    rows from google sheet users "client"
+[00:00:17.722] Server  LOG     Login attempt for client: Found role='client', status='active'
+[00:00:18.002] Server  INFO    attempt to read range "Message_Logs!A2:G"
+[00:00:18.942] Server  INFO    attempt to read range "Replies!A2:D"
+[00:00:19.934] Server  INFO    attempt to read range "Client_Balance!A2:C"
+[00:00:20.644] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:23.742] Server  INFO    attempt to read range "Leads!A2:F"
+[00:00:24.753] Server  INFO    attempt to read range "Leads!A2:F"
+[00:00:46.540] Server  INFO    attempt to read range "Message_Logs!A2:G"
+[00:00:48.092] Server  INFO    attempt to read range "Replies!A2:D"
+[00:00:49.124] Server  INFO    attempt to read range "Client_Balance!A2:C"

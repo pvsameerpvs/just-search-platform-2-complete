@@ -178,10 +178,12 @@ const SHEET_ID = ()=>{
 };
 async function readRange(range) {
     const sheets = sheetsClient();
+    console.info("attempt to read range", range);
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SHEET_ID(),
         range
     });
+    console.info("read range", range);
     return res.data.values ?? [];
 }
 async function appendRow(range, values) {

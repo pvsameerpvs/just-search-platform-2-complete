@@ -10,44 +10,53 @@ export async function POST(req: Request) {
   const parsed = LoginSchema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
-  const { username, password } = parsed.data;
-  const rows = await readRange("Users!A2:G");
+  try {
+    const { username, password } = parsed.data;
+    console.info("Login attempt for", username);
+    const rows = await readRange("Users!A2:G");
+     console.info("rows from google sheet users", username);
 
-  const row = rows.find((r) => {
-    const email = (r?.[2] ?? "").toString().toLowerCase();
-    const uname = (r?.[3] ?? "").toString().toLowerCase();
-    const input = username.toLowerCase();
-    return email === input || uname === input;
-  });
+    const row = rows.find((r) => {
+      const email = (r?.[2] ?? "").toString().toLowerCase();
+      const uname = (r?.[3] ?? "").toString().toLowerCase();
+      const input = username.toLowerCase();
+      return email === input || uname === input;
+      
+      
+    });
 
-  if (!row) {
-    console.log("Login failed: User not found in sheet for input:", username);
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    if (!row) {
+      console.log("Login failed: User not found in sheet for input:", username);
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
+
+    const role = (row?.[5] ?? "").toString().toLowerCase().trim();
+    const status = (row?.[6] ?? "active").toString().toLowerCase().trim();
+
+    console.log(`Login attempt for ${username}: Found role='${role}', status='${status}'`);
+
+    if (role !== "client") {
+      console.log(`Login failed: Role mismatch. Expected 'client', got '${role}'`);
+      return NextResponse.json({ error: "Not a client account" }, { status: 403 });
+    }
+
+    if (status !== "active") {
+      console.log(`Login failed: Status mismatch. Expected 'active', got '${status}'`);
+      return NextResponse.json({ error: "Account inactive" }, { status: 403 });
+    }
+
+    const hash = (row?.[4] ?? "").toString();
+    const ok = await bcrypt.compare(password, hash).catch(() => false);
+    if (!ok) {
+      console.log("Login failed: Password mismatch for user:", username); 
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    }
+
+    const res = NextResponse.json({ ok: true, client_id: (row?.[0] ?? "").toString(), name: (row?.[1] ?? "").toString() });
+    res.cookies.set("js_client_session", "ok", { httpOnly: true, sameSite: "lax", path: "/" });
+    return res;
+  } catch (error: any) {
+    console.error("Login API Error:", error);
+    return NextResponse.json({ error: "Internal Server Error", details: error.message }, { status: 500 });
   }
-
-  const role = (row?.[5] ?? "").toString().toLowerCase().trim();
-  const status = (row?.[6] ?? "active").toString().toLowerCase().trim();
-
-  console.log(`Login attempt for ${username}: Found role='${role}', status='${status}'`);
-
-  if (role !== "client") {
-    console.log(`Login failed: Role mismatch. Expected 'client', got '${role}'`);
-    return NextResponse.json({ error: "Not a client account" }, { status: 403 });
-  }
-
-  if (status !== "active") {
-    console.log(`Login failed: Status mismatch. Expected 'active', got '${status}'`);
-    return NextResponse.json({ error: "Account inactive" }, { status: 403 });
-  }
-
-  const hash = (row?.[4] ?? "").toString();
-  const ok = await bcrypt.compare(password, hash).catch(() => false);
-  if (!ok) {
-    console.log("Login failed: Password mismatch for user:", username); 
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-  }
-
-  const res = NextResponse.json({ ok: true, client_id: (row?.[0] ?? "").toString(), name: (row?.[1] ?? "").toString() });
-  res.cookies.set("js_client_session", "ok", { httpOnly: true, sameSite: "lax", path: "/" });
-  return res;
 }
