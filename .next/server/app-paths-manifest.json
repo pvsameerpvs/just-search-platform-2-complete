@@ -1,0 +1,19 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/auth/logout/route": "app/api/auth/logout/route.js",
+  "/api/campaigns/create/route": "app/api/campaigns/create/route.js",
+  "/api/client/summary/route": "app/api/client/summary/route.js",
+  "/api/leads/filters/route": "app/api/leads/filters/route.js",
+  "/api/leads/pull/route": "app/api/leads/pull/route.js",
+  "/api/messages/results/route": "app/api/messages/results/route.js",
+  "/api/messages/send/route": "app/api/messages/send/route.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/design-system/page": "app/design-system/page.js",
+  "/lead-machine/page": "app/lead-machine/page.js",
+  "/page": "app/page.js",
+  "/reports/page": "app/reports/page.js",
+  "/results/page": "app/results/page.js",
+  "/settings/page": "app/settings/page.js"
+}

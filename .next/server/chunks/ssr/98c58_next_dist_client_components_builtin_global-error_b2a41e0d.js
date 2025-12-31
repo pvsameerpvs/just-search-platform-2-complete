@@ -1,0 +1,3 @@
+module.exports=[93861,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(30419);a.n(d("[project]/Projects/JustSearch/just-search-lead-automation/just-search-platform-2-complete/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},77684,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(30419);a.n(d("[project]/Projects/JustSearch/just-search-lead-automation/just-search-platform-2-complete/node_modules/next/dist/client/components/builtin/global-error.js"))},9611,a=>{"use strict";a.i(93861);var b=a.i(77684);a.n(b)}];
+
+//# sourceMappingURL=98c58_next_dist_client_components_builtin_global-error_b2a41e0d.js.map

@@ -1,0 +1,7 @@
+1:"$Sreact.fragment"
+2:I[57120,["/_next/static/chunks/11d70fc1a7a895f6.js","/_next/static/chunks/bf0026716aaa1c71.js"],"Sidebar"]
+3:I[99499,["/_next/static/chunks/11d70fc1a7a895f6.js","/_next/static/chunks/bf0026716aaa1c71.js"],"Topbar"]
+4:I[925,["/_next/static/chunks/7033628ad40965c3.js","/_next/static/chunks/38e5cab7425c79bb.js"],"OutletBoundary"]
+5:"$Sreact.suspense"
+0:{"buildId":"2S_vok-0rUQQ64oSNN7e9","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen flex","children":[["$","$L2",null,{}],["$","div",null,{"className":"flex-1 flex flex-col","children":[["$","$L3",null,{"title":"Reports"}],["$","main",null,{"className":"p-6","children":["$","div",null,{"className":"rounded-xl border border-white/10 bg-white/5 shadow-sm","children":[["$","div",null,{"className":"p-5 border-b border-white/10","children":[["$","div",null,{"className":"text-white font-semibold","children":"Reports"}],["$","div",null,{"className":"text-white/60 text-sm","children":"Campaign and messaging reports (scaffold)"}]]}],["$","div",null,{"className":"p-5 text-white/80 text-sm","children":"This page is included as a placeholder for future reports UI."}]]}]}]]}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/11d70fc1a7a895f6.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/bf0026716aaa1c71.js","async":true}]],["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"loading":null,"isPartial":false}
+6:null
