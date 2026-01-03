@@ -21,7 +21,11 @@ export async function POST(req: Request) {
       whatsapp: (r?.[4] ?? "").toString(),
       email: (r?.[5] ?? "").toString(),
     }))
-    .filter((l) => industries.includes(l.industry) && areas.includes(l.area))
+    .filter((l) => {
+        const industryMatch = industries.length === 0 || industries.includes(l.industry);
+        const areaMatch = areas.includes(l.area);
+        return industryMatch && areaMatch;
+    })
     .slice(0, limit);
 
   return NextResponse.json({ leads });

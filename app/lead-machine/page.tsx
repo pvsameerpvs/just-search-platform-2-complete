@@ -21,14 +21,31 @@ export default function LeadMachinePage() {
   const [channel, setChannel] = useState<"whatsapp"|"email"|"both">("whatsapp");
   const [loading, setLoading] = useState(false);
 
+  /* New State for User's Industry (to be excluded/disabled) */
+  const [userIndustry, setUserIndustry] = useState<string | null>(null);
+
   useEffect(() => {
+    // Load filters
     fetch("/api/leads/filters").then(r=>r.json()).then((d)=>{
       setIndustryOptions(d.industries ?? []);
       setAreaOptions(d.areas ?? []);
     }).catch(()=>{});
+
+    // Load User Profile
+    fetch("/api/client/me").then(r=>r.json()).then((d) => {
+      if (d?.industry) {
+        setUserIndustry(d.industry);
+        // Ensure it's not selected (default is empty, so we are good, but if we had logic to auto-select, we'd clear it)
+        setIndustries(prev => prev.filter(i => i !== d.industry));
+      }
+    }).catch(()=>{});
   }, []);
 
-  const canPull = industries.length>0 && areas.length>0;
+  /* 
+    User requested "if primary industry disable need" -> interpretation: Industry filter is optional.
+    Then "disable Industries that industry" -> Prevent user from selecting their OWN industry (competitors).
+  */
+  const canPull = areas.length > 0;
 
   async function pull() {
     setLoading(true);
@@ -85,16 +102,20 @@ export default function LeadMachinePage() {
               <div>
                 <Label>Industries (Multi Select)</Label>
                 <div className="mt-2 max-h-56 overflow-auto space-y-2 pr-2">
-                  {industryOptions.map((it) => (
-                    <label key={it.name} className="flex items-center gap-2 text-white/80 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={industries.includes(it.name)}
-                        onChange={(e)=>setIndustries(p=>e.target.checked?[...p,it.name]:p.filter(x=>x!==it.name))}
-                      />
-                      {it.name}
-                    </label>
-                  ))}
+                  {industryOptions.map((it) => {
+                    const isUserIndustry = it.name === userIndustry;
+                    return (
+                      <label key={it.name} className={`flex items-center gap-2 text-white/80 text-sm ${isUserIndustry ? "opacity-50 cursor-not-allowed" : ""}`}>
+                        <input
+                          type="checkbox"
+                          checked={industries.includes(it.name)}
+                          disabled={isUserIndustry}
+                          onChange={(e)=>setIndustries(p=>e.target.checked?[...p,it.name]:p.filter(x=>x!==it.name))}
+                        />
+                        {it.name} {isUserIndustry && <span className="text-xs text-white/40">(Your Industry)</span>}
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
               <div>

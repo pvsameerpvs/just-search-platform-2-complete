@@ -6,7 +6,7 @@ export const LoginSchema = z.object({
 });
 
 export const PullLeadsSchema = z.object({
-  industries: z.array(z.string()).min(1),
+  industries: z.array(z.string()),
   areas: z.array(z.string()).min(1),
   limit: z.number().int().min(1).max(500).default(100),
 });

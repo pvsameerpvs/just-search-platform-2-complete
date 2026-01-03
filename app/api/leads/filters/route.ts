@@ -1,17 +1,29 @@
 import { NextResponse } from "next/server";
-import { readRange } from "@/lib/googleSheets";
+import * as GoogleSheets from "@/lib/googleSheets";
 
 export async function GET() {
-  const leads = await readRange("Leads!A2:F").catch(() => [] as any[]);
-  const industriesSet = new Set<string>();
-  const areasSet = new Set<string>();
-  for (const r of leads) {
-    const industry = (r?.[2] ?? "").toString();
-    const area = (r?.[3] ?? "").toString();
-    if (industry) industriesSet.add(industry);
-    if (area) areasSet.add(area);
+  console.log("Debug: GoogleSheets exports keys:", Object.keys(GoogleSheets));
+  
+  const getIndustryPricing = GoogleSheets.getIndustryPricing;
+  const getAreaPricing = GoogleSheets.getAreaPricing;
+
+  if (!getIndustryPricing || !getAreaPricing) {
+    console.error("Critical Error: getIndustryPricing or getAreaPricing is missing from lib/googleSheets import!");
+    return NextResponse.json({ industries: [], areas: [] });
   }
-  const industries = Array.from(industriesSet).sort().map((name) => ({ name }));
-  const areas = Array.from(areasSet).sort().map((name) => ({ name }));
+
+  const [industryRows, areaRows] = await Promise.all([
+    getIndustryPricing().catch((err) => { console.error("Error fetching industries:", err); return []; }),
+    getAreaPricing().catch((err) => { console.error("Error fetching areas:", err); return []; }),
+  ]);
+
+  const industries = industryRows
+    .filter((r) => r.name)
+    .map((r) => ({ name: r.name, price: Number(r.price) }));
+    
+  const areas = areaRows
+    .filter((r) => r.name)
+    .map((r) => ({ name: r.name, price: Number(r.price) }));
+
   return NextResponse.json({ industries, areas });
 }
